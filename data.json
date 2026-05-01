@@ -30,7 +30,7 @@
           ]
         },
         {
-          "name": "critical_time",
+"name": "critical_time",
           "label": "O que acontece se a plataforma parar?",
           "description": "Se a plataforma ficar fora do ar (não funcionar), quanto tempo consegue esperar até alguém resolver o problema?",
           "type": "radio",
@@ -105,30 +105,6 @@
               "value": "99.9",
               "label": "Sempre disponível",
               "desc": "Só pode ficar offline 22 minutos por mês"
-            }
-          ]
-        },
-        {
-          "name": "response_time",
-          "label": "Tempo de resposta quando há problema",
-          "description": "Quando reportares um problema, quanto tempo quer esperar até alguém da nossa equipa responder?",
-          "type": "radio",
-          "options": [
-            {
-              "value": "24h",
-              "label": "24 horas (dia útil)",
-              "desc": "Resposta no próximo dia útil"
-            },
-            {
-              "value": "4h",
-              "label": "4 horas",
-              "desc": "Resposta rápida durante o dia",
-              "default": true
-            },
-            {
-              "value": "1h",
-              "label": "1 hora - 24/7",
-              "desc": "Resposta a qualquer hora, mesmo à noite"
             }
           ]
         },
@@ -237,8 +213,8 @@
       "questions": [
         {
           "name": "backup",
-          "label": "O que acontece se perdermos os dados?",
-          "description": "Se o servidor tiver um problema e perdermos todos os dados, quanto tempo de trabalho perde?",
+          "label": "Com que frequência fazemos backup dos seus dados?",
+          "description": "Com que periodicidade deseja que façamos cópia de segurança dos seus dados?",
           "type": "radio",
           "options": [
             {
@@ -332,7 +308,7 @@
         {
           "name": "msg_limit",
           "label": "O que fazer quando acabarem as mensagens?",
-          "description": "Se o limite de SMS/E-mail for atingido:",
+          "description": "Se o limite de SMS/E-mail for atingido, a diferença será cobrada ao cliente ao final do mês",
           "type": "radio",
           "options": [
             {
@@ -423,35 +399,6 @@
               "label": "Melhorar aos poucos",
               "desc": "Quero pequenas melhorias todos os meses",
               "default": true
-            },
-            {
-              "value": "grow",
-              "label": "Crescer e evoluir muito",
-              "desc": "Quero adicionar novas funcionalidades frequentemente"
-            }
-          ]
-        },
-        {
-          "name": "dev_focus",
-          "label": "Onde quer investir o tempo de desenvolvimento?",
-          "description": "Se a nossa equipa tiver tempo disponível, em que deve trabalhar?",
-          "type": "radio",
-          "options": [
-            {
-              "value": "invisible",
-              "label": "Performance (por baixo)",
-              "desc": "Que seja mais rápido e estável"
-            },
-            {
-              "value": "visible",
-              "label": "Interface (visível)",
-              "desc": "Melhorar botões, cores, textos que o cliente vê",
-              "default": true
-            },
-            {
-              "value": "both",
-              "label": "Ambos",
-              "desc": "Equilíbrio entre os dois"
             }
           ]
         },
@@ -493,25 +440,6 @@
               "value": "video",
               "label": "Zoom/Teams",
               "sublabel": "Videoconferência"
-            }
-          ]
-        },
-        {
-          "name": "user_support",
-          "label": "Se um cliente tiver problema técnico?",
-          "description": "Se um dos seus clientes tiver dificuldade técnica, quem deve ajudar?",
-          "type": "radio",
-          "options": [
-            {
-              "value": "direct",
-              "label": "Ele contacta-me diretamente",
-              "desc": "Sem suporte da Yetu Tech"
-            },
-            {
-              "value": "shared",
-              "label": "Yetu Tech ajuda diretamente",
-              "desc": "Tenho canal de suporte próprio para clientes",
-              "default": true
             }
           ]
         },
@@ -605,8 +533,18 @@
             {
               "value": "training",
               "label": "Treinamento da Equipa",
-              "desc": "2h de treinamento mensal para sua equipa usar a plataforma",
-              "price": 60
+              "desc": "USD 100 por pessoa - 2h de treinamento para sua equipa usar a plataforma",
+              "price": 100
+            },
+            {
+              "name": "training_people",
+              "label": "Quantas pessoas vão ser treinadas?",
+              "type": "number",
+              "default": 1,
+              "min": 1,
+              "max": 50,
+              "price_per_unit": 100,
+              "conditional_on": "training"
             },
             {
               "value": "documentation",
@@ -636,8 +574,8 @@
         },
         {
           "name": "dev_hours",
-          "label": "Horas de desenvolvimento extras",
-          "description": "Adicione horas extras de desenvolvimento por mês para novas funcionalidades",
+          "label": "Horas dedicadas para atividades específicas",
+          "description": "Horas por mês para ajustes de bugs, melhor de performance, escalabilidade, etc. (Novas funcionalidades requerem orçamento separado)",
           "type": "number",
           "min": 0,
           "max": 40,
@@ -712,7 +650,7 @@
       "cdn": 60,
       "security_audit": 83,
       "dedicated_manager": 150,
-      "training": 60,
+      "training": 100,
       "documentation": 40,
       "consulting": 100,
       "migration": 250,

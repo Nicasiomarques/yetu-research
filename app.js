@@ -138,6 +138,18 @@ async function init() {
         updateProgress();
         setupEventListeners();
         restoreFormState();
+        
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            const value = checkbox.value;
+            const conditionalFields = document.querySelectorAll(`.conditional-field[data-show-if="${value}"]`);
+            conditionalFields.forEach(field => {
+                DOMUtils.toggleClass(field, 'hidden', false);
+                const input = field.querySelector('input');
+                if (input && !input.value) {
+                    input.value = input.getAttribute('min') || 1;
+                }
+            });
+        });
     } catch (error) {
         container.innerHTML = `
             <div class="text-center p-8">
@@ -237,7 +249,7 @@ const LABEL_MAPPINGS = {
 		'maintenance_preventive': '• Manutenção Preventiva'
 	},
 	responseTime: { '1h': '1 hora (24/7)', '4h': '4 horas', '24h': '24 horas' },
-	slaText: { '1h': '1 hora (24/7)', '4h': '4 horas', '24h': '24 horas' },
+	criticalTimeText: { 'premium': 'Imediata (24/7)', 'balanced': '24h', 'economy': '2-3 dias' },
 	backup: { 'realtime': 'Tempo real', 'daily': 'Diário', 'weekly': 'Semanal' },
 	backupText: { 'realtime': 'Tempo real', 'daily': 'Diário', 'weekly': 'Semanal' },
 	communication: {
@@ -282,12 +294,16 @@ function renderQuestion(q) {
     const hasDescription = q.description;
     const labelHtml = addTooltip(q.label);
     
-    if (hasDescription) {
+    if (q.conditional_on) {
+        html += `<div class="conditional-field hidden mb-7" data-show-if="${q.conditional_on}">`;
+    } else {
         html += `<div class="mb-7">`;
+    }
+    
+    if (hasDescription) {
         html += `<label class="block text-base font-semibold text-slate-800 mb-2">${labelHtml}</label>`;
         html += `<p class="text-sm text-slate-500 mb-4">${addTooltip(q.description)}</p>`;
     } else {
-        html += `<div class="mb-7">`;
         html += `<label class="block text-base font-semibold text-slate-800 mb-2">${labelHtml}</label>`;
     }
 
@@ -373,9 +389,12 @@ function renderQuestion(q) {
     else if (q.type === 'number') {
         const min = q.min !== undefined ? `min="${q.min}"` : '';
         const max = q.max !== undefined ? `max="${q.max}"` : '';
-        html += `<input type="number" name="${q.name}" ${min} ${max} placeholder="${q.placeholder || '0'}" class="w-full p-4 border-2 border-slate-200 rounded-2xl bg-white text-slate-700 font-medium placeholder:text-slate-400 focus:border-primary-500 transition-all">`;
+        const defaultVal = q.default !== undefined ? `value="${q.default}"` : '';
+        html += `<input type="number" name="${q.name}" ${min} ${max} ${defaultVal} placeholder="${q.placeholder || '0'}" class="w-full p-4 border-2 border-slate-200 rounded-2xl bg-white text-slate-700 font-medium placeholder:text-slate-400 focus:border-primary-500 transition-all">`;
         if (q.price_per_hour) {
             html += `<p class="text-sm text-slate-500 mt-2">USD ${q.price_per_hour}/hora</p>`;
+        } else if (q.price_per_unit) {
+            html += `<p class="text-sm text-slate-500 mt-2">USD ${q.price_per_unit} por pessoa</p>`;
         }
     } 
     else if (q.type === 'fields') {
@@ -398,6 +417,10 @@ function renderQuestion(q) {
     }
 
     html += `</div>`;
+    
+    if (q.conditional_on) {
+        html += `</div>`;
+    }
     return html;
 }
 
@@ -546,10 +569,23 @@ function handleRadioChange(e) {
 
 function handleCheckboxChange(e) {
     try {
-        const parent = e.target.closest('.checkbox-card');
+        const checkbox = e.target;
+        const parent = checkbox.closest('.checkbox-card');
         if (parent) {
-            DOMUtils.toggleClass(parent, 'selected', e.target.checked);
+            DOMUtils.toggleClass(parent, 'selected', checkbox.checked);
         }
+        
+        const value = checkbox.value;
+        const conditionalFields = document.querySelectorAll(`.conditional-field[data-show-if="${value}"]`);
+        conditionalFields.forEach(field => {
+            DOMUtils.toggleClass(field, 'hidden', !checkbox.checked);
+            if (checkbox.checked) {
+                const input = field.querySelector('input');
+                if (input && !input.value) {
+                    input.value = input.getAttribute('min') || 1;
+                }
+            }
+        });
     } catch (error) {
         ErrorHandler.handle(error, 'Seleção de checkbox');
     }
@@ -561,13 +597,12 @@ function calculateBudget() {
     
     let plan = 'professional';
     const criticalTime = formDataObj.get('critical_time');
-    const responseTime = formDataObj.get('response_time');
     const backup = formDataObj.get('backup');
     const uptime = formDataObj.get('uptime');
 
-    if (criticalTime === 'premium' || responseTime === '1h' || uptime === '99.9' || backup === 'realtime') {
+    if (criticalTime === 'premium' || uptime === '99.9' || backup === 'realtime') {
         plan = 'enterprise';
-    } else if (criticalTime === 'economy' && responseTime === '24h' && backup === 'weekly') {
+    } else if (criticalTime === 'economy' && backup === 'weekly') {
         plan = 'starter';
     }
 
@@ -595,12 +630,19 @@ function calculateBudget() {
 
     const selectedExtras = formDataObj.getAll('extras');
     selectedExtras.forEach(extra => {
-        if (formData.pricing.extras[extra]) {
-            extrasPrice += formData.pricing.extras[extra];
-            const extraLabel = LABEL_MAPPINGS.get('extras', extra);
-            features.push(extraLabel);
-            planDetails.push(`${extraLabel}: USD ${formData.pricing.extras[extra].toFixed(0)}/mês`);
+        let extraPrice = formData.pricing.extras[extra] || 0;
+        
+        if (extra === 'training') {
+            const trainingPeople = parseInt(formDataObj.get('training_people')) || 1;
+            extraPrice = extraPrice * trainingPeople;
+            features.push(`Treinamento (${trainingPeople} pessoas)`);
+            planDetails.push(`Treinamento (${trainingPeople} pessoas): USD ${extraPrice} (uma vez)`);
+        } else {
+            features.push(LABEL_MAPPINGS.get('extras', extra));
+            planDetails.push(`${LABEL_MAPPINGS.get('extras', extra)}: USD ${extraPrice}/mês`);
         }
+        
+        extrasPrice += extraPrice;
     });
 
     const devHours = parseInt(formDataObj.get('dev_hours')) || 0;
@@ -611,7 +653,7 @@ function calculateBudget() {
         planDetails.push(`${devHours}h desenvolvimento extra: USD ${devHoursPrice}/mês`);
     }
 
-    const slaLabel = LABEL_MAPPINGS.get('responseTime', responseTime);
+    const slaLabel = LABEL_MAPPINGS.get('criticalTimeText', criticalTime);
     features.push(`SLA: resposta em ${slaLabel}`);
 
     const totalMonthly = basePrice + extrasPrice;
@@ -668,20 +710,19 @@ function sendToWhatsApp() {
     const formDataObj = new FormData(form);
     
     const companyName = document.querySelector('input[name="company_name"]').value || 'Cliente';
-    const companyEmail = document.querySelector('input[name="company_email"]').value || 'Não informado';
+const companyEmail = document.querySelector('input[name="company_email"]').value || 'Não informado';
     const planName = document.getElementById('plan-name').textContent;
     const monthlyPrice = document.getElementById('monthly-price').textContent;
     const discountedPrice = document.getElementById('discounted-price').textContent;
     const total3Months = document.getElementById('total-3months').textContent;
     
-    const responseTime = formDataObj.get('response_time');
+    const criticalTime = formDataObj.get('critical_time');
     const backup = formDataObj.get('backup');
     const communication = formDataObj.get('communication');
     const meetingFreq = formDataObj.get('meeting_frequency');
     const extras = formDataObj.getAll('extras');
-    const devHours = formDataObj.get('dev_hours') || 0;
-    
-    const slaText = LABEL_MAPPINGS.get('slaText', responseTime);
+
+    const criticalTimeText = LABEL_MAPPINGS.get('criticalTimeText', criticalTime);
     const backupText = LABEL_MAPPINGS.get('backupText', backup);
     const commText = LABEL_MAPPINGS.get('communicationText', communication);
     const meetingText = LABEL_MAPPINGS.get('meetingShort', meetingFreq);
@@ -690,7 +731,14 @@ function sendToWhatsApp() {
     if (extras.length > 0) {
         extrasList = '\n*Extras selecionados:*\n';
         extras.forEach(e => {
-            extrasList += LABEL_MAPPINGS.get('extrasList', e) + '\n';
+            let label = LABEL_MAPPINGS.get('extrasList', e);
+            if (e === 'training') {
+                const trainingPeople = formDataObj.get('training_people') || 1;
+                label = `• ${label} (${trainingPeople} pessoas)`;
+                extrasList += `${label} - USD 100/un\n`;
+            } else {
+                extrasList += `${label}\n`;
+            }
         });
     }
     if (devHours > 0) {
@@ -713,7 +761,7 @@ function sendToWhatsApp() {
         `• Total 3 meses: USD ${total3Months}\n` +
         `• Contrato mínimo: 3 meses\n\n` +
         `*⚙️ CONFIGURAÇÃO ESCOLHIDA*\n` +
-        `• SLA resposta: ${slaText}\n` +
+        `• Tempo de resposta: ${criticalTimeText}\n` +
         `• Backup: ${backupText}\n` +
         `• Comunicação: ${commText}\n` +
         `• Reuniões: ${meetingText}\n` +
