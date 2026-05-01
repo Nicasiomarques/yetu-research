@@ -605,13 +605,13 @@ async function submitToNetlify(budgetData) {
         fd.append('extras_selected', budgetData.extras.join(', '));
         fd.append('plan_details', budgetData.planDetails.join(' | '));
 
-        const response = await fetch('/', {
+        const response = await fetch(window.location.href, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams(fd).toString()
         });
 
-        if (!response.ok) throw new Error('Erro ao enviar formulário');
+        if (!response.ok) throw new Error(`Erro ${response.status}: ${response.statusText}`);
         showNotification('Orçamento enviado com sucesso!', 'success');
     } catch (error) {
         console.error('Netlify Forms:', error);
