@@ -1,0 +1,757 @@
+{
+  "steps": [
+    {
+      "id": 1,
+      "title": "Operação e Negócio",
+      "shortTitle": "Operação",
+      "questions": [
+        {
+          "name": "peak_hours",
+          "label": "Quando a plataforma está mais ativa?",
+          "description": "Quando é que os seus clientes mais usam a plataforma para fazer transações? (Ex: Troca de moedas, depósitos, levantamentos)",
+          "type": "radio",
+          "options": [
+            {
+              "value": "morning",
+              "label": "Manhã",
+              "sublabel": "8h - 12h"
+            },
+            {
+              "value": "afternoon",
+              "label": "Tarde",
+              "sublabel": "12h - 18h",
+              "default": true
+            },
+            {
+              "value": "evening",
+              "label": "Noite",
+              "sublabel": "18h - 22h"
+            }
+          ]
+        },
+        {
+          "name": "critical_time",
+          "label": "O que acontece se a plataforma parar?",
+          "description": "Se a plataforma ficar fora do ar (não funcionar), quanto tempo consegue esperar até alguém resolver o problema?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "economy",
+              "label": "Posso esperar 2-3 dias",
+              "desc": "Não é urgente, prefiro gastar menos"
+            },
+            {
+              "value": "balanced",
+              "label": "Preciso de resolução em 24h",
+              "desc": "Equilíbrio entre custo e rapidez",
+              "default": true
+            },
+            {
+              "value": "premium",
+              "label": "Preciso de ajuda imediata",
+              "desc": "Meus clientes não podem esperar, mesmo à noite"
+            }
+          ]
+        },
+        {
+          "name": "downtime_impact",
+          "label": "Qual o impacto se ficar 15 minutos fora do ar?",
+          "type": "select",
+          "options": [
+            {
+              "value": "low",
+              "label": "Pequeno - Apenas inconvenience"
+            },
+            {
+              "value": "medium",
+              "label": "Médio - Afeta a reputação",
+              "default": true
+            },
+            {
+              "value": "high",
+              "label": "Alto - Prejuízo financeiro significativo"
+            },
+            {
+              "value": "critical",
+              "label": "Crítico - Perco clientes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Garantia de Serviço",
+      "shortTitle": "SLA",
+      "questions": [
+        {
+          "name": "uptime",
+          "label": "Com que frequência a plataforma precisa estar disponível?",
+          "description": "Quanto tempo por mês a plataforma pode estar offline? Pense em quantos clientes perde se o site ficar fora do ar.",
+          "type": "radio",
+          "options": [
+            {
+              "value": "99",
+              "label": "Funciona na maioria do tempo",
+              "desc": "Pode ficar offline até 7h por mês"
+            },
+            {
+              "value": "99.5",
+              "label": "Quase sempre disponível",
+              "desc": "Pode ficar offline até 3h por mês",
+              "default": true
+            },
+            {
+              "value": "99.9",
+              "label": "Sempre disponível",
+              "desc": "Só pode ficar offline 22 minutos por mês"
+            }
+          ]
+        },
+        {
+          "name": "response_time",
+          "label": "Tempo de resposta quando há problema",
+          "description": "Quando reportares um problema, quanto tempo quer esperar até alguém da nossa equipa responder?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "24h",
+              "label": "24 horas (dia útil)",
+              "desc": "Resposta no próximo dia útil"
+            },
+            {
+              "value": "4h",
+              "label": "4 horas",
+              "desc": "Resposta rápida durante o dia",
+              "default": true
+            },
+            {
+              "value": "1h",
+              "label": "1 hora - 24/7",
+              "desc": "Resposta a qualquer hora, mesmo à noite"
+            }
+          ]
+        },
+        {
+          "name": "emergency_name",
+          "label": "Quem contactamos em emergências?",
+          "description": "Se houver um problema grave fora do horário comercial, quem deve ser contactado?",
+          "type": "fields",
+          "fields": [
+            {
+              "name": "emergency_name",
+              "type": "text",
+              "placeholder": "Nome completo"
+            },
+            {
+              "name": "emergency_phone",
+              "type": "tel",
+              "placeholder": "Telefone / WhatsApp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Como Prefere Trabalhar",
+      "shortTitle": "Autonomia",
+      "questions": [
+        {
+          "name": "autonomy",
+          "label": "Quem toma as decisões técnicas?",
+          "description": "Quando houver necessidade de fazer alterações técnicas (atualizações, segurança, mudanças no sistema), quem decide?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "full",
+              "label": "Deixo a Yetu Tech decidir",
+              "desc": "Confio na equipa, só quero receber relatórios mensais",
+              "default": true
+            },
+            {
+              "value": "consult",
+              "label": "Quero ser consultado",
+              "desc": "Perguntem-me antes de fazer qualquer mudança"
+            },
+            {
+              "value": "total",
+              "label": "Eu é que mando",
+              "desc": "Todas as decisões passam por mim primeiro"
+            }
+          ]
+        },
+        {
+          "name": "crisis_management",
+          "label": "E se houver problema grave de madrugada?",
+          "description": "Se houver um problema grave às 3 da manhã, o que prefere que façamos?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "auto",
+              "label": "Resolvam e depois expliquem",
+              "desc": "Não me acordem, corrijam o problema e depois informem",
+              "default": true
+            },
+            {
+              "value": "wake",
+              "label": "Acordem-me",
+              "desc": "Quero ser contactado para autorizar qualquer intervenção"
+            }
+          ]
+        },
+        {
+          "name": "meeting_frequency",
+          "label": "Com que frequência quer conversar connosco?",
+          "type": "select",
+          "options": [
+            {
+              "value": "daily",
+              "label": "📅 Diariamente - Para acompanhamento intenso"
+            },
+            {
+              "value": "3days",
+              "label": "📅 De 3 em 3 dias - Equilíbrio frequente"
+            },
+            {
+              "value": "weekly",
+              "label": "📅 Semanal - Check-in padrão",
+              "default": true
+            },
+            {
+              "value": "biweekly",
+              "label": "📅 Quinzenal - Bastante autonomia"
+            },
+            {
+              "value": "monthly",
+              "label": "📅 Mensal - Apenas relatórios"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Segurança e Dados",
+      "shortTitle": "Segurança",
+      "questions": [
+        {
+          "name": "backup",
+          "label": "O que acontece se perdermos os dados?",
+          "description": "Se o servidor tiver um problema e perdermos todos os dados, quanto tempo de trabalho perde?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "weekly",
+              "label": "Posso perder até 1 semana",
+              "desc": "Fazemos cópia de segurança 1 vez por semana"
+            },
+            {
+              "value": "daily",
+              "label": "Posso perder no máximo 1 dia",
+              "desc": "Fazemos cópia de segurança todos os dias",
+              "default": true
+            },
+            {
+              "value": "realtime",
+              "label": "Não posso perder absolutamente nada",
+              "desc": "Guardamos tudo em tempo real"
+            }
+          ]
+        },
+        {
+          "name": "log_retention",
+          "label": "Por quanto tempo guarda o histórico?",
+          "description": "Durante quanto tempo precisa guardar os registos de transações e operações?",
+          "type": "select",
+          "options": [
+            {
+              "value": "3months",
+              "label": "3 meses"
+            },
+            {
+              "value": "6months",
+              "label": "6 meses",
+              "default": true
+            },
+            {
+              "value": "1year",
+              "label": "1 ano"
+            },
+            {
+              "value": "2years",
+              "label": "2 anos"
+            }
+          ]
+        },
+        {
+          "name": "priority",
+          "label": "O que é mais importante para si?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "stability",
+              "label": "Que nunca tenha problemas",
+              "desc": "Quero que funcione sempre, sem erros",
+              "default": true
+            },
+            {
+              "value": "features",
+              "label": "Que tenha sempre algo novo",
+              "desc": "Quero melhorias e novas funcionalidades"
+            }
+          ]
+        },
+        {
+          "name": "compliance",
+          "label": "Precisa de certificações específicas?",
+          "description": "O seu negócio exige algum tipo de certificação ou compliance?",
+          "type": "checkbox",
+          "options": [
+            {
+              "value": "lgpd",
+              "label": "LGPD / RGPD (Proteção de dados)"
+            },
+            {
+              "value": "pci",
+              "label": "PCI-DSS (Pagamentos)"
+            },
+            {
+              "value": "iso",
+              "label": "ISO 27001 (Segurança)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Custos e Infraestrutura",
+      "shortTitle": "Infra",
+      "questions": [
+        {
+          "name": "msg_limit",
+          "label": "O que fazer quando acabarem as mensagens?",
+          "description": "Se o limite de SMS/E-mail for atingido:",
+          "type": "radio",
+          "options": [
+            {
+              "value": "stop",
+              "label": "Parar de enviar",
+              "desc": "Para não gerar custos extras sem minha autorização",
+              "default": true
+            },
+            {
+              "value": "auto",
+              "label": "Continuar a enviar",
+              "desc": "Não quero perder nenhuma mensagem para os clientes"
+            }
+          ]
+        },
+        {
+          "name": "traffic_spike",
+          "label": "Planeja campanhas de marketing?",
+          "description": "Nos próximos meses, vai fazer campanhas que podem atrair muitas pessoas de uma só vez?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "no",
+              "label": "Não",
+              "desc": "Tráfego estável, sem surpresas",
+              "default": true
+            },
+            {
+              "value": "yes",
+              "label": "Sim, talvez",
+              "desc": "Campanhas de marketing previstas"
+            },
+            {
+              "value": "massive",
+              "label": "Sim, em grande escala",
+              "desc": "Eventos/lançamentos com alto impacto"
+            }
+          ]
+        },
+        {
+          "name": "domains",
+          "label": "Quantos domínios precisa gerir?",
+          "type": "select",
+          "options": [
+            {
+              "value": "1",
+              "label": "1 domínio principal"
+            },
+            {
+              "value": "3",
+              "label": "1 domínio + 2 subdomínios",
+              "default": true
+            },
+            {
+              "value": "5",
+              "label": "até 5 domínios"
+            },
+            {
+              "value": "10",
+              "label": "até 10 domínios"
+            },
+            {
+              "value": "10+",
+              "label": "mais de 10 domínios"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Crescimento e Melhorias",
+      "shortTitle": "Evolução",
+      "questions": [
+        {
+          "name": "evolution",
+          "label": "Como imagina a plataforma no futuro?",
+          "description": "O que espera que aconteça com a plataforma nos próximos meses?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "maintain",
+              "label": "Manter como está",
+              "desc": "Só quero que continue a funcionar"
+            },
+            {
+              "value": "improve",
+              "label": "Melhorar aos poucos",
+              "desc": "Quero pequenas melhorias todos os meses",
+              "default": true
+            },
+            {
+              "value": "grow",
+              "label": "Crescer e evoluir muito",
+              "desc": "Quero adicionar novas funcionalidades frequentemente"
+            }
+          ]
+        },
+        {
+          "name": "dev_focus",
+          "label": "Onde quer investir o tempo de desenvolvimento?",
+          "description": "Se a nossa equipa tiver tempo disponível, em que deve trabalhar?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "invisible",
+              "label": "Performance (por baixo)",
+              "desc": "Que seja mais rápido e estável"
+            },
+            {
+              "value": "visible",
+              "label": "Interface (visível)",
+              "desc": "Melhorar botões, cores, textos que o cliente vê",
+              "default": true
+            },
+            {
+              "value": "both",
+              "label": "Ambos",
+              "desc": "Equilíbrio entre os dois"
+            }
+          ]
+        },
+        {
+          "name": "new_features",
+          "label": "Tem ideias de novas funcionalidades?",
+          "type": "textarea",
+          "placeholder": "Ex: App mobile, integração com bancos, dashboard de analytics..."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Suporte e Comunicação",
+      "shortTitle": "Suporte",
+      "questions": [
+        {
+          "name": "communication",
+          "label": "Qual a melhor forma de falar connosco?",
+          "type": "radio-grid",
+          "options": [
+            {
+              "value": "email",
+              "label": "E-mail",
+              "sublabel": "Documentos/formal"
+            },
+            {
+              "value": "whatsapp",
+              "label": "WhatsApp",
+              "sublabel": "Mensagens rápidas",
+              "default": true
+            },
+            {
+              "value": "call",
+              "label": "Telefone",
+              "sublabel": "Chamadas diretas"
+            },
+            {
+              "value": "video",
+              "label": "Zoom/Teams",
+              "sublabel": "Videoconferência"
+            }
+          ]
+        },
+        {
+          "name": "user_support",
+          "label": "Se um cliente tiver problema técnico?",
+          "description": "Se um dos seus clientes tiver dificuldade técnica, quem deve ajudar?",
+          "type": "radio",
+          "options": [
+            {
+              "value": "direct",
+              "label": "Ele contacta-me diretamente",
+              "desc": "Sem suporte da Yetu Tech"
+            },
+            {
+              "value": "shared",
+              "label": "Yetu Tech ajuda diretamente",
+              "desc": "Tenho canal de suporte próprio para clientes",
+              "default": true
+            }
+          ]
+        },
+        {
+          "name": "contact_hours",
+          "label": "Quando prefere ser contactado?",
+          "type": "select",
+          "options": [
+            {
+              "value": "business",
+              "label": "🕘 Horário comercial (9h - 18h) - só dias úteis"
+            },
+            {
+              "value": "extended",
+              "label": "🕗 Horário expandido (8h - 20h) - mais flexibilidade",
+              "default": true
+            },
+            {
+              "value": "anytime",
+              "label": "🕛 A qualquer hora (24/7) - urgência total"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Personalize seu Plano",
+      "shortTitle": "Extras",
+      "questions": [
+        {
+          "name": "extras",
+          "label": "Serviços adicionais",
+          "description": "Selecione serviços extras que deseja adicionar ao seu plano",
+          "type": "checkbox-grid",
+"options": [
+            {
+              "value": "reports_weekly",
+              "label": "Relatório Semanal",
+              "desc": "Relatório detalhado de performance toda semana",
+              "price": 50
+            },
+            {
+              "value": "reports_custom",
+              "label": "Relatório Personalizado",
+              "desc": "Dashboard customizado com métricas específicas",
+              "price": 75
+            },
+            {
+              "value": "analytics_advanced",
+              "label": "Analytics Avançado",
+              "desc": "Heatmaps, funis e análise de comportamento do usuário",
+              "price": 80
+            },
+            {
+              "value": "support_247",
+              "label": "Suporte 24/7 Priority",
+              "desc": "Equipe técnica disponível 24 horas, 7 dias por semana",
+              "price": 200
+            },
+            {
+              "value": "backup_realtime",
+              "label": "Backup em Tempo Real",
+              "desc": "Cópia automática contínua - nunca perde dados",
+              "price": 100
+            },
+            {
+              "value": "ssl_premium",
+              "label": "SSL Premium + Wildcard",
+              "desc": "Cadeado verde + proteção subdomínios",
+              "price": 50
+            },
+            {
+              "value": "cdn",
+              "label": "CDN Premium Global",
+              "desc": "Servidores mundiais - site rápido em qualquer lugar",
+              "price": 60
+            },
+            {
+              "value": "security_audit",
+              "label": "Auditoria de Segurança Trimestral",
+              "desc": "Verificação completa de vulnerabilidades a cada 3 meses",
+              "price": 83
+            },
+            {
+              "value": "dedicated_manager",
+              "label": "Gerente de Conta Dedicado",
+              "desc": "Pessoa exclusiva para atender suas necessidades",
+              "price": 150
+            },
+            {
+              "value": "training",
+              "label": "Treinamento da Equipa",
+              "desc": "2h de treinamento mensal para sua equipa usar a plataforma",
+              "price": 60
+            },
+            {
+              "value": "documentation",
+              "label": "Documentação Técnica",
+              "desc": "Manual completo actualizado da plataforma",
+              "price": 40
+            },
+            {
+              "value": "consulting",
+              "label": "Consultoria Estratégica",
+              "desc": "1h/mês de consultoria para melhorias e growth",
+              "price": 100
+            },
+            {
+              "value": "migration",
+              "label": "Auxílio à Migração",
+              "desc": "Apoio técnico na migração de outra plataforma",
+              "price": 250
+            },
+            {
+              "value": "maintenance_preventive",
+              "label": "Manutenção Preventiva",
+              "desc": "Verificações mensais de saúde do sistema",
+              "price": 70
+            }
+          ]
+        },
+        {
+          "name": "dev_hours",
+          "label": "Horas de desenvolvimento extras",
+          "description": "Adicione horas extras de desenvolvimento por mês para novas funcionalidades",
+          "type": "number",
+          "min": 0,
+          "max": 40,
+          "placeholder": "0",
+          "price_per_hour": 50
+        },
+        {
+          "name": "payment_period",
+          "label": "Periodicidade de pagamento",
+          "type": "radio-grid",
+          "options": [
+            {
+              "value": "monthly",
+              "label": "Mensal",
+              "sublabel": "Sem desconto",
+              "default": true
+            },
+            {
+              "value": "quarterly",
+              "label": "Trimestral",
+              "sublabel": "10% desconto"
+            },
+            {
+              "value": "semiannual",
+              "label": "Semestral",
+              "sublabel": "15% desconto"
+            }
+          ]
+        },
+        {
+          "name": "company_name",
+          "label": "Os seus dados",
+          "type": "fields",
+          "fields": [
+            {
+              "name": "company_name",
+              "type": "text",
+              "placeholder": "Nome da empresa"
+            },
+            {
+              "name": "company_email",
+              "type": "email",
+              "placeholder": "E-mail para envio do orçamento"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pricing": {
+    "plans": {
+      "starter": {
+        "hours": 4,
+        "price": 999
+      },
+      "professional": {
+        "hours": 8,
+        "price": 1299
+      },
+      "enterprise": {
+        "hours": 16,
+        "price": 1999
+      }
+    },
+    "extras": {
+      "reports_weekly": 50,
+      "reports_custom": 75,
+      "analytics_advanced": 80,
+      "support_247": 200,
+      "backup_realtime": 100,
+      "ssl_premium": 50,
+      "cdn": 60,
+      "security_audit": 83,
+      "dedicated_manager": 150,
+      "training": 60,
+      "documentation": 40,
+      "consulting": 100,
+      "migration": 250,
+      "maintenance_preventive": 70
+    },
+    "meeting": {
+      "daily": 200,
+      "3days": 100,
+      "weekly": 0,
+      "biweekly": 0,
+      "monthly": 0
+    },
+    "video_call": 30,
+    "setupFee": 500,
+    "dev_hour_price": 50
+  },
+  "features": {
+    "starter": [
+      "4h desenvolvimento/mês",
+      "Backup diário",
+      "Monitorização 24/7",
+      "Suporte por e-mail",
+      "Relatório mensal"
+    ],
+    "professional": [
+      "8h desenvolvimento/mês",
+      "Backup diário",
+      "Monitorização 24/7",
+      "Suporte WhatsApp",
+      "Relatório quinzenal",
+      "SSL gratuito"
+    ],
+    "enterprise": [
+      "16h desenvolvimento/mês",
+      "Backup em tempo real",
+      "Monitorização 24/7 proativa",
+      "Suporte 24/7",
+      "CDN Premium",
+      "Gerente dedicado"
+    ]
+  }
+}
