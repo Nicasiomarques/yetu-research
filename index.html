@@ -321,7 +321,9 @@
             <div class="flex gap-3 mt-4 text-xs font-medium text-slate-400 overflow-x-auto px-1 scrollbar-none" id="step-labels"></div>
         </div>
 
-        <form id="budget-form" class="space-y-5">
+        <form id="budget-form" name="budget" data-netlify="true" data-netlify-honeypot="bot-field" class="space-y-5">
+            <input type="hidden" name="form-name" value="budget">
+            <p class="hidden"><label>Não preencha: <input name="bot-field"></label></p>
             <!-- Steps serão renderizados dinamicamente via JS -->
             <div id="steps-container"></div>
             <!-- Navigation -->

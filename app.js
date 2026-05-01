@@ -591,6 +591,53 @@ function handleCheckboxChange(e) {
     }
 }
 
+async function submitToNetlify(budgetData) {
+    try {
+        const form = document.getElementById('budget-form');
+        const fd = new FormData(form);
+
+        fd.append('plan', budgetData.plan);
+        fd.append('monthly_price', budgetData.monthlyPrice);
+        fd.append('discounted_price', budgetData.discountedPrice);
+        fd.append('discount_label', budgetData.discountLabel);
+        fd.append('setup_fee', budgetData.setupFee);
+        fd.append('total_3months', budgetData.total3Months);
+        fd.append('extras_selected', budgetData.extras.join(', '));
+        fd.append('plan_details', budgetData.planDetails.join(' | '));
+
+        const response = await fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(fd).toString()
+        });
+
+        if (!response.ok) throw new Error('Erro ao enviar formulário');
+        showNotification('Orçamento enviado com sucesso!', 'success');
+    } catch (error) {
+        console.error('Netlify Forms:', error);
+        showNotification('Orçamento calculado. O envio automático falhou, mas pode usar o WhatsApp.', 'warning');
+    }
+}
+
+function showNotification(message, type) {
+    let el = document.getElementById('netlify-notification');
+    if (el) el.remove();
+
+    const colors = {
+        success: 'bg-green-50 border-green-300 text-green-800',
+        warning: 'bg-amber-50 border-amber-300 text-amber-800',
+        error: 'bg-red-50 border-red-300 text-red-800'
+    };
+
+    el = document.createElement('div');
+    el.id = 'netlify-notification';
+    el.className = `fixed top-4 right-4 max-w-sm ${colors[type] || colors.success} border-2 rounded-2xl p-4 z-50 animate-fade-in no-print`;
+    const icon = type === 'success' ? '✓' : '⚠';
+    el.innerHTML = `<div class="flex items-center gap-3"><span class="text-xl">${icon}</span><div><p class="font-semibold">${message}</p></div><button onclick="document.getElementById('netlify-notification').remove()" class="ml-auto font-bold opacity-60 hover:opacity-100">✕</button></div>`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 8000);
+}
+
 function calculateBudget() {
     const form = document.getElementById('budget-form');
     const formDataObj = new FormData(form);
@@ -693,6 +740,17 @@ function calculateBudget() {
     document.getElementById('budget-form').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     persistFormData();
+
+    submitToNetlify({
+        plan,
+        monthlyPrice: totalMonthly,
+        discountedPrice: finalPrice,
+        discountLabel: discountLabel,
+        setupFee,
+        total3Months,
+        extras: selectedExtras,
+        planDetails
+    });
 }
 
 function restartBudget() {
